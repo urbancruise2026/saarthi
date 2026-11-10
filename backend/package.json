@@ -1,0 +1,41 @@
+{
+  "name": "pinak_backend",
+  "version": "1.0.0",
+  "description": "Pinak backend web appliction ",
+  "keywords": [
+    "nodejs",
+    "SQL",
+    "database"
+  ],
+  "license": "ISC",
+  "author": "urban_cursie",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "npm run build && node src/server.js",
+    "start:prod": "npm run build && node --env-file=.env.production src/server.js",
+    "start:local": "npm run build && node --env-file=.env.local src/server.js",
+    "dev": "nodemon --exec \"node --env-file=.env.local\" src/server.js",
+    "dev:prod": "nodemon --exec \"node --env-file=.env.production\" src/server.js",
+    "build": "node scripts/build-frontend.js"
+  },
+  "dependencies": {
+    "axios": "^1.19.0",
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.9.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2",
+    "mysql2": "^3.16.2",
+    "node-cron": "^4.6.0",
+    "nodemon": "^3.1.11",
+    "sarthi": "file:..",
+    "sequelize": "^6.37.7",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
+    "uuid": "^13.0.0"
+  }
+}
