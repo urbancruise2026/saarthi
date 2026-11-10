@@ -20,24 +20,29 @@ import { verifyJWT } from "../../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/").post(registerUser);
-router.route("/").get(getAllEmployee);
+// ---------- Public routes (no token) ----------
 router.route("/login").post(loginUser);
-router.route("/employeesearchlist").get(getEmployees);
-router.route("/current-user").get(verifyJWT, getCurrentUser);
-router.route("/hr-employees").get(getHREmployeesController);
-router.route("/:uuid").put(updateUserRoleManagerDepartment);
-router.route("/by-role/:id").get(getUserDetailsByRole);
-
-router.route("/update/:id").put(updateUserByIdController);
-router.route("/status").get(getEmployeeBYStatus);
-router.route("/updatestatus/:id").patch(updateEmployeeStatusController);
-router.route("/:id").get(getSingaleUser);
-
-router.route("/change-password").post(verifyJWT, changePassword);
 router.route("/changepasswordbyusername").post(changePasswordbyUserName);
+
+// ---------- Protected routes ----------
+router.use(verifyJWT); // iske neeche sab protected
+
+router.route("/").post(registerUser).get(getAllEmployee);
+
+// Static routes pehle
+router.route("/employeesearchlist").get(getEmployees);
+router.route("/current-user").get(getCurrentUser);
+router.route("/hr-employees").get(getHREmployeesController);
+router.route("/status").get(getEmployeeBYStatus);
+router.route("/change-password").post(changePassword);
 router
   .route("/reporting-managers/:departmentName")
   .get(getAllReportingManagerWithDepartment);
+router.route("/by-role/:id").get(getUserDetailsByRole);
+router.route("/update/:id").put(updateUserByIdController);
+router.route("/updatestatus/:id").patch(updateEmployeeStatusController);
+
+// Dynamic routes sabse last
+router.route("/:id").get(getSingaleUser).put(updateUserRoleManagerDepartment);
 
 export default router;
