@@ -6,8 +6,15 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import registerRoutes from "./routes/index.js";
+import healthRouter from "./module/Health/health.route.js";
 
 const app = express();
+
+// Health checks first: no CORS, body parsing or auth. Used by deploy.sh.
+//   /health/live  -> process is running
+//   /health/ready -> process is running AND MySQL answers
+//   /health       -> summary (details only with the x-health-token header)
+app.use(["/health", "/api/v1/health"], healthRouter);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const frontendDist = path.resolve(__dirname, "../public");
@@ -38,18 +45,12 @@ app.use(cookieParser());
 // ─── API ─────────────────────────────────────────────────────────────────────
 registerRoutes(app);
 
-app.get("/health", (req, res) => {
-  res.send("🚀 Server started successfully");
-});
-
 // Unknown API URLs return JSON 404 (not the React page).
 app.use("/api", (req, res) => {
-  res
-    .status(404)
-    .json({
-      success: false,
-      message: `API route not found: ${req.originalUrl}`,
-    });
+  res.status(404).json({
+    success: false,
+    message: `API route not found: ${req.originalUrl}`,
+  });
 });
 
 // ─── Frontend (built React app in backend/public) ────────────────────────────
