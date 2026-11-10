@@ -12,12 +12,10 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
+    "build": "node scripts/build-frontend.js",
     "start": "npm run build && node src/server.js",
-    "start:prod": "npm run build && node --env-file=.env.production src/server.js",
-    "start:local": "npm run build && node --env-file=.env.local src/server.js",
-    "dev": "nodemon --exec \"node --env-file=.env.local\" src/server.js",
-    "dev:prod": "nodemon --exec \"node --env-file=.env.production\" src/server.js",
-    "build": "node scripts/build-frontend.js"
+    "serve": "node src/server.js",
+    "dev": "nodemon --ignore public/ src/server.js"
   },
   "dependencies": {
     "axios": "^1.19.0",
@@ -32,7 +30,6 @@
     "mysql2": "^3.16.2",
     "node-cron": "^4.6.0",
     "nodemon": "^3.1.11",
-    "sarthi": "file:..",
     "sequelize": "^6.37.7",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",

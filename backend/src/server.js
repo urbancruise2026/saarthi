@@ -1,3 +1,4 @@
+import "./config/env.js"; // must be first: loads backend/.env
 import http from "http";
 import { app } from "./app.js";
 import { connectMySQL } from "./config/mySqlDB.js";

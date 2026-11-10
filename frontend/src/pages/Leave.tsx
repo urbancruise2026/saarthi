@@ -45,7 +45,7 @@ import { useAccessControl } from "@/utils/Accesscontrol";
 import { Pagination } from "@/components/Pagination/Pagination";
 import LeaveManagementTable from "@/components/Leave/LeaveManagementTable";
 import UpdateLeaveStatusDialog from "@/components/Leave/UpdateLeaveStatusDialog";
-import LeaveBalanceCards from "@/components/Leave/LeaveBalanceCards"; // NEW (apna path)
+import LeaveBalanceCards from "@/components/Leave/Leavebalancecards";
 
 interface LeaveFilters {
   branchId?: string;
