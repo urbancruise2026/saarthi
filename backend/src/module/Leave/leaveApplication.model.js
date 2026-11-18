@@ -3,7 +3,8 @@ import { buildUpdate } from "./leave.service.js";
 
 const BASE_SELECT = `
   SELECT a.*,
-         e.employee_id, e.first_name, e.last_name,
+         e.employee_id AS employee_code,
+         e.first_name, e.last_name,
          CONCAT_WS(' ', e.first_name, e.last_name) AS employeeName,
          b.branch_name,
          d.department_name,
@@ -16,7 +17,6 @@ const BASE_SELECT = `
   LEFT JOIN uc_staff_employment se ON se.staff_id = e.id
   LEFT JOIN branches b ON b.id = se.branch_id
   LEFT JOIN departments d ON d.id = e.department_id`;
-
 export const getAllApplications = async ({
   employeeId = null,
   status = null,
