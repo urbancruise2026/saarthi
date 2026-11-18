@@ -46,6 +46,7 @@ import { Pagination } from "@/components/Pagination/Pagination";
 import LeaveManagementTable from "@/components/Leave/LeaveManagementTable";
 import UpdateLeaveStatusDialog from "@/components/Leave/UpdateLeaveStatusDialog";
 import LeaveBalanceCards from "@/components/Leave/Leavebalancecards";
+import { toast } from "sonner";
 
 interface LeaveFilters {
   branchId?: string;
@@ -187,12 +188,16 @@ function Leave() {
         }),
       ).unwrap();
 
+      toast.success("Leave applied successfully");
       setModalOpen(false);
-      // apply ke baad bhi current filters ke saath hi refetch karo
       dispatch(getAllLeavesThunk(leaveFilters));
-      dispatch(getLeaveBalanceSummaryThunk(summaryFilters)); // NEW
-    } catch (err) {
+      dispatch(getLeaveBalanceSummaryThunk(summaryFilters));
+    } catch (err: any) {
       console.error("Failed to apply leave:", err);
+      // rejectWithValue se string aayegi, warna err.message
+      const message =
+        typeof err === "string" ? err : err?.message || "Failed to apply leave";
+      toast.error(message);
     }
   };
 

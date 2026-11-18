@@ -136,7 +136,7 @@ const getMonthlyAttendanceController = asyncHandler(async (req, res) => {
 });
 
 const markAttendanceController = asyncHandler(async (req, res) => {
-  const employeeId = 70;
+  const employeeId = 77;
   const { attendanceDate, punchIn } = req.body;
 
   if (!employeeId) {
@@ -160,7 +160,7 @@ const markAttendanceController = asyncHandler(async (req, res) => {
 });
 
 const updatePunchOutController = asyncHandler(async (req, res) => {
-  const employeeId = 77;
+  const employeeId = 70;
 
   const { attendanceDate, punchOut, punch_out } = req.body;
 

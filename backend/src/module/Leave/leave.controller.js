@@ -16,10 +16,12 @@ import {
   assertBalance,
   tracksBalanceFor,
   COMP_OFF_CODE,
+  validateAdvanceNotice,
 } from "./leave.service.js";
 
 const applyLeaveController = asyncHandler(async (req, res) => {
   const employeeId = req.user?.id;
+  console.log(" employeeId applyLeaveController", employeeId);
   const { leaveType, fromDate, toDate, totalDays, reason } = req.body;
 
   if (!employeeId) {
@@ -47,6 +49,11 @@ const applyLeaveController = asyncHandler(async (req, res) => {
   const days = Number(totalDays);
   if (Number.isNaN(days) || days <= 0) {
     throw new ApiError(400, "totalDays must be a number greater than 0");
+  }
+
+  const notice = validateAdvanceNotice(fromDate, days);
+  if (!notice.valid) {
+    throw new ApiError(400, notice.message);
   }
 
   const leaveTypeRow = await getLeaveType(leaveType);

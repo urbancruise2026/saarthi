@@ -1,12 +1,21 @@
 import { pool } from "../../config/mySqlDB.js";
 
 import { randomUUID } from "crypto";
+import { resolveEmployeeId } from "../Leave/leave.service.js";
+
+// compOff.model.js mein purane createCompOffIfEligible ki jagah ye paste karo.
+// Top par ye imports hone chahiye (agar pehle se nahi hain to add karo):
+//   import { randomUUID } from "crypto";
+//   import { resolveEmployeeId } from "../Leave/leave.service.js";
 
 export const createCompOffIfEligible = async (
   employeeId,
   attendanceDate,
   workedMinutes,
 ) => {
+  // numeric ho ya code (UCDEL...), dono ko numeric uc_staff.id banata hai
+  const empId = await resolveEmployeeId(employeeId);
+
   const [rows] = await pool.execute(
     `
     SELECT 
@@ -26,7 +35,7 @@ export const createCompOffIfEligible = async (
 
     WHERE u.id = ?
     `,
-    [attendanceDate, attendanceDate, employeeId],
+    [attendanceDate, attendanceDate, empId],
   );
 
   if (!rows.length) return;
@@ -58,7 +67,7 @@ export const createCompOffIfEligible = async (
     ON DUPLICATE KEY UPDATE
       remarks = VALUES(remarks)
     `,
-    [uuid, employeeId, attendanceDate, remarks],
+    [uuid, empId, attendanceDate, remarks],
   );
 };
 
@@ -173,26 +182,22 @@ export const getCompOffs = async (filters = {}) => {
 export const getCompOffBalance = async (employeeId) => {
   const [rows] = await pool.execute(
     `
-    SELECT
-      COALESCE(
-        SUM(
-          CASE
-            WHEN status = 'Available'
-            THEN days
-            ELSE 0
-          END
-        ),
-      0) AS balance
+    SELECT COALESCE(SUM(days), 0) AS balance
     FROM comp_offs
     WHERE employee_id = ?
+      AND status = 'Available'
     `,
     [employeeId],
   );
 
-  return rows[0];
+  return Number(rows[0].balance); // number return karo
 };
 
+// compOff.model.js mein purane useCompOffBalance ki jagah ye paste karo.
+
 export const useCompOffBalance = async (employeeId, totalDays, leaveId) => {
+  // numeric ho ya code (UCDEL...), dono ko numeric uc_staff.id banata hai
+  const empId = await resolveEmployeeId(employeeId);
   const connection = await pool.getConnection();
 
   try {
@@ -200,13 +205,13 @@ export const useCompOffBalance = async (employeeId, totalDays, leaveId) => {
 
     const [availableCompOffs] = await connection.execute(
       `
-      SELECT id, days
+      SELECT id, days, earned_date
       FROM comp_offs
       WHERE employee_id = ? AND status = 'Available'
       ORDER BY earned_date ASC
       FOR UPDATE
       `,
-      [employeeId],
+      [empId],
     );
 
     let remainingDays = Number(totalDays);
@@ -222,7 +227,7 @@ export const useCompOffBalance = async (employeeId, totalDays, leaveId) => {
         );
         remainingDays -= Number(compOff.days);
       } else {
-        // Partial consume — split karna padega
+        // Partial consume: split karna padega
         const usedDays = remainingDays;
         const leftoverDays = Number(compOff.days) - usedDays;
 
@@ -233,10 +238,10 @@ export const useCompOffBalance = async (employeeId, totalDays, leaveId) => {
 
         await connection.execute(
           `
-          INSERT INTO comp_offs (employee_id, attendance_id, earned_date, days, status, remarks)
-          VALUES (?, NULL, ?, ?, 'Available', 'Split remainder')
-          `,
-          [employeeId, compOff.earned_date, leftoverDays],
+  INSERT INTO comp_offs (uuid, employee_id, attendance_id, earned_date, days, status, remarks, is_split)
+  VALUES (UUID(), ?, NULL, ?, ?, 'Available', 'Split remainder', 1)
+  `,
+          [empId, compOff.earned_date, leftoverDays],
         );
 
         remainingDays = 0;

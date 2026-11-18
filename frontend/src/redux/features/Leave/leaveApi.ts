@@ -124,7 +124,7 @@ export const getAllLeaves = async (filters: LeaveFilters = {}) => {
       params: filters,
     });
     const result = unwrap<any>(response, "Failed to fetch leaves");
-
+    console.log(" response ", response);
     if (result?.pagination) {
       const { page, limit, total, totalPages } = result.pagination;
       return {
@@ -238,6 +238,7 @@ export const getLeaveBalanceSummary = async (
     const response = await axiosInstance.get("/leave-balances/summary", {
       params: filters,
     });
+
     return unwrap<LeaveBalanceSummary>(
       response,
       "Failed to fetch leave balance summary",

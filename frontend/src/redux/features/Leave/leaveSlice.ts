@@ -32,9 +32,12 @@ export const applyLeaveThunk = createAsyncThunk(
     try {
       return await applyLeave(payload);
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to apply leave",
-      );
+      // axios error ho ya interceptor ne already response.data de diya ho, dono handle
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to apply leave";
+      return rejectWithValue(message);
     }
   },
 );

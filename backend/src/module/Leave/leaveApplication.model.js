@@ -13,7 +13,8 @@ const BASE_SELECT = `
   FROM leave_applications a
   JOIN uc_staff e ON e.id = a.employee_id
   JOIN leave_types lt ON lt.id = a.leave_type_id
-  LEFT JOIN branches b ON b.id = e.branchOffice_id
+  LEFT JOIN uc_staff_employment se ON se.staff_id = e.id
+  LEFT JOIN branches b ON b.id = se.branch_id
   LEFT JOIN departments d ON d.id = e.department_id`;
 
 export const getAllApplications = async ({
@@ -22,7 +23,7 @@ export const getAllApplications = async ({
   leaveTypeId = null,
   branchId = null,
   departmentId = null,
-  managerId = null, // NEW: reporting manager ki id
+  managerId = null,
 } = {}) => {
   try {
     const where = [];
@@ -41,16 +42,15 @@ export const getAllApplications = async ({
       params.push(leaveTypeId);
     }
     if (branchId) {
-      where.push("e.branch_id = ?");
+      where.push("se.branch_id = ?"); // fixed: uc_staff_employment se se
       params.push(branchId);
     }
     if (departmentId) {
       where.push("e.department_id = ?");
       params.push(departmentId);
     }
-    // NEW: sirf us manager ke under wale employees ki leaves
     if (managerId) {
-      where.push("(e.manager_id = ? OR a.employee_id = ?)");
+      where.push("(e.manager_id = ? OR a.employee_id = ?)"); // uc_staff mein manager_id hai
       params.push(managerId, managerId);
     }
 
