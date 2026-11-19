@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { CalendarClock, Loader2, Search, CalendarDays } from "lucide-react";
+import {
+  CalendarClock,
+  Loader2,
+  Search,
+  CalendarDays,
+  CalendarMinus,
+  CalendarCheck,
+} from "lucide-react";
 import {
   Table,
   TableHeader,
@@ -32,7 +39,105 @@ const statusColor: Record<string, string> = {
   approved: "bg-green-100 text-green-700 border-green-300",
   pending: "bg-orange-100 text-orange-700 border-orange-300",
   rejected: "bg-red-100 text-red-700 border-red-300",
+  available: "bg-green-100 text-green-700 border-green-300",
+  used: "bg-blue-100 text-blue-700 border-blue-300",
 };
+
+// 1.25 jaise decimals ke liye: 2 decimal tak, bekar zeros hata do
+const fmt = (n: number) => String(Number(n.toFixed(2)));
+
+// ─────────────────────────────────────────────
+// Comp Off summary cards (Leave cards jaisa design)
+// ─────────────────────────────────────────────
+interface CompOffCardsProps {
+  total: number; // total comp off mile
+  taken: number; // jitne use ho chuke
+  remaining: number; // jitne bache hain
+  loading?: boolean;
+}
+
+function CompOffCards({
+  total,
+  taken,
+  remaining,
+  loading = false,
+}: CompOffCardsProps) {
+  const usedPercent = total > 0 ? Math.min((taken / total) * 100, 100) : 0;
+
+  const cards = [
+    {
+      label: "Total Comp Off",
+      value: fmt(total),
+      icon: CalendarDays,
+      bg: "#B8E6FE", // light blue
+    },
+    {
+      label: "Comp Off Taken",
+      value: fmt(taken),
+      icon: CalendarMinus,
+      bg: "#FFD8A8", // peach
+    },
+    {
+      label: "Remaining",
+      value: fmt(remaining),
+      icon: CalendarCheck,
+      bg: "#B9F5D0", // mint green
+      showUsage: true, // is card ke andar usage bar dikhegi
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      {cards.map((c) => {
+        const Icon = c.icon;
+        return (
+          <div
+            key={c.label}
+            className="flex flex-col justify-center gap-3 rounded-2xl px-4 py-4 shadow-md"
+            style={{ background: c.bg }}
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/60 text-gray-800">
+                <Icon size={22} />
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-gray-700">{c.label}</p>
+                {loading ? (
+                  <div className="mt-1 h-6 w-12 animate-pulse rounded bg-white/70" />
+                ) : (
+                  <p className="text-xl font-bold leading-tight text-gray-900">
+                    {c.value}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {c.showUsage && !loading && (
+              <div>
+                <div className="flex items-center justify-between text-xs font-medium text-gray-700">
+                  <span>{Math.round(usedPercent)}% used</span>
+                  <span>
+                    {fmt(taken)} / {fmt(total)} days
+                  </span>
+                </div>
+                <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-white/70">
+                  <div
+                    className="h-full rounded-full transition-all duration-700 ease-out"
+                    style={{
+                      width: `${usedPercent}%`,
+                      background: "#FB923C",
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 function CompOffTable() {
   const dispatch = useAppDispatch();
@@ -96,6 +201,20 @@ function CompOffTable() {
     );
   }, [list, search]);
 
+  // Cards ke counts (abhi load hui list se; total server ke pagination.total se)
+  const counts = useMemo(() => {
+    const safeList = Array.isArray(list) ? list : [];
+    const countBy = (...statuses: string[]) =>
+      safeList.filter((c: any) =>
+        statuses.includes((c.status ?? "").toLowerCase()),
+      ).length;
+    return {
+      total: pagination?.total ?? safeList.length,
+      taken: countBy("used"),
+      remaining: countBy("available", "approved"),
+    };
+  }, [list, pagination?.total]);
+
   const handleLimitChange = (newLimit: number) => {
     setLimit(newLimit);
     setPage(1);
@@ -103,6 +222,14 @@ function CompOffTable() {
 
   return (
     <div className="space-y-6">
+      {/* Summary cards */}
+      <CompOffCards
+        total={counts.total}
+        taken={counts.taken}
+        remaining={counts.remaining}
+        loading={loading && filteredRows.length === 0}
+      />
+
       {/* Filters — same components/pattern as DutyRoster.tsx */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 w-full">
         <div className="flex flex-col sm:flex-row flex-wrap gap-7 w-full justify-center">

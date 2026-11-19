@@ -1,16 +1,12 @@
-import {
-  CalendarDays,
-  CalendarMinus,
-  CalendarCheck,
-  TimerReset,
-} from "lucide-react";
+import { CalendarDays, CalendarMinus, CalendarCheck } from "lucide-react";
 
 interface LeaveBalanceCardsProps {
   totalLeave: number; // is saal/period ki total leave (accrued)
   leavesTaken: number; // ab tak li hui leave
-  compOffBalance: number; // bacha hua comp off
   leavesRemaining?: number; // na do to total - taken khud nikal lega
   loading?: boolean;
+  // Comp Off card hata diya hai. Parent abhi bhi ye prop bheje to error nahi aayega.
+  compOffBalance?: number;
 }
 
 // 1.25 jaise decimals ke liye: 2 decimal tak, bekar zeros hata do
@@ -19,7 +15,6 @@ const fmt = (n: number) => String(Number(n.toFixed(2)));
 export default function LeaveBalanceCards({
   totalLeave,
   leavesTaken,
-  compOffBalance,
   leavesRemaining,
   loading = false,
 }: LeaveBalanceCardsProps) {
@@ -47,16 +42,10 @@ export default function LeaveBalanceCards({
       bg: "#B9F5D0", // mint green
       showUsage: true, // is card ke andar usage bar dikhegi
     },
-    {
-      label: "Comp Off",
-      value: fmt(compOffBalance),
-      icon: TimerReset,
-      bg: "#DDD6FE", // lavender
-    },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {cards.map((c) => {
         const Icon = c.icon;
         return (
