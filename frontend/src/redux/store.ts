@@ -21,6 +21,11 @@ import holidayReducer from "../redux/features/Calendar/calendarSlice";
 import dutyrosterReducer from "../redux/features/Dutyroster/Dutyrosterslice";
 import leaveReducer from "../redux/features/Leave/leaveSlice";
 import compOffsReducer from "../redux/features/Compoff/Compoffslice";
+import trainingModuleReducer from "@/redux/features/TrainingModule/trainingModuleSlice";
+import trainingReviewReducer from "@/redux/features/TrainingReview/trainingReviewSlice";
+import trainingQueryReducer from "@/redux/features/trainingQuery/trainingQuerySlice";
+import trainingTypingReducer from "@/redux/features/trainingTyping/trainingTypingSlice"; // 🆕
+import trainingMapQueryReducer from "@/redux/features/TrainingMapQuery/trainingMapQuerySlice";
 
 export const store = configureStore({
   reducer: {
@@ -46,6 +51,11 @@ export const store = configureStore({
     dutyRoster: dutyrosterReducer,
     leave: leaveReducer,
     compOffs: compOffsReducer,
+    trainingModule: trainingModuleReducer,
+    trainingReview: trainingReviewReducer, // 🆕
+    trainingQuery: trainingQueryReducer, // 🆕
+    trainingTyping: trainingTypingReducer, // 🆕
+    trainingMapQuery: trainingMapQueryReducer,
   },
 });
 

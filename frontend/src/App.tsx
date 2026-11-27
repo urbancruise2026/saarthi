@@ -49,6 +49,7 @@ import OfferLetter from "./pages/Document/OfferLetter";
 import Leave from "./pages/Leave";
 import Attendance from "./pages/Attendance";
 import AttendanceCalendar from "./pages/Calendar";
+import TrainingManager from "./pages/TrainingModule";
 
 const queryClient = new QueryClient();
 
@@ -181,6 +182,16 @@ const App = () => (
                   <Route element={<RouteGuard allowedPath="/access" />}>
                     <Route path="/access" element={<EmployeeManager />} />
                     <Route path="/trainig" element={<Training />} />
+                  </Route>
+
+                  {/* ── Access / Training — guarded ── */}
+                  <Route
+                    element={<RouteGuard allowedPath="/training-videos" />}
+                  >
+                    <Route
+                      path="/training-videos"
+                      element={<TrainingManager />}
+                    />
                   </Route>
 
                   {/* ── Assets — guarded ── */}

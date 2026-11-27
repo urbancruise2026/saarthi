@@ -96,6 +96,7 @@ const ALL_ROUTES = [
   "/hr-policies",
   "/access",
   "/assets",
+  "/training-videos",
   "/background-verification",
   "/attendance",
   "/leave",
@@ -108,28 +109,28 @@ type RouteAccessMap = Partial<Record<AccessRole, string[]>>;
 export const SUB_DEPT_ACCESS: Record<SubDepartment, RouteAccessMap> = {
   // ── Sales ───────────────────────────────────────────────────────────────────
   "Pre-Sales": {
-    EMPLOYEE: ["/attendance", "/leave", "/hr-policies"],
-    TEAM_LEAD: ["/attendance", "/leave", "/hr-policies"],
-    MANAGER: ["/attendance", "/leave", "/hr-policies"],
-    ZONAL_HEAD: ["/attendance", "/leave", "/hr-policies"],
+    EMPLOYEE: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    TEAM_LEAD: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    MANAGER: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    ZONAL_HEAD: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
     HOD: ALL_ROUTES,
     SUPER_ADMIN: ALL_ROUTES,
   },
 
   "Corp. Sales": {
-    EMPLOYEE: ["/attendance", "/leave", "/hr-policies"],
-    TEAM_LEAD: ["/attendance", "/leave", "/hr-policies"],
-    MANAGER: ["/attendance", "/leave", "/hr-policies"],
-    ZONAL_HEAD: ["/attendance", "/leave", "/hr-policies"],
+    EMPLOYEE: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    TEAM_LEAD: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    MANAGER: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    ZONAL_HEAD: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
     HOD: ALL_ROUTES,
     SUPER_ADMIN: ALL_ROUTES,
   },
 
   "Tele-Sales": {
-    EMPLOYEE: ["/attendance", "/leave", "/hr-policies"],
-    TEAM_LEAD: ["/attendance", "/leave", "/hr-policies"],
-    MANAGER: ["/attendance", "/leave", "/hr-policies"],
-    ZONAL_HEAD: ["/attendance", "/leave", "/hr-policies"],
+    EMPLOYEE: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    TEAM_LEAD: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    MANAGER: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    ZONAL_HEAD: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
     HOD: ALL_ROUTES,
     SUPER_ADMIN: ALL_ROUTES,
   },
@@ -180,10 +181,10 @@ export const SUB_DEPT_ACCESS: Record<SubDepartment, RouteAccessMap> = {
   },
 
   "Web App": {
-    EMPLOYEE: ["/attendance", "/leave", "/hr-policies"],
-    TEAM_LEAD: ["/attendance", "/leave", "/hr-policies"],
-    MANAGER: ["/attendance", "/leave", "/hr-policies"],
-    ZONAL_HEAD: ["/attendance", "/leave", "/hr-policies"],
+    EMPLOYEE: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    TEAM_LEAD: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    MANAGER: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    ZONAL_HEAD: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
     HOD: ALL_ROUTES,
     SUPER_ADMIN: ALL_ROUTES,
   },
@@ -207,8 +208,8 @@ export const SUB_DEPT_ACCESS: Record<SubDepartment, RouteAccessMap> = {
   },
 
   "Ops & Admin": {
-    EMPLOYEE: ["/attendance", "/leave", "/hr-policies"],
-    MANAGER: ["/attendance", "/leave", "/hr-policies"],
+    EMPLOYEE: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
+    MANAGER: ["/attendance", "/leave", "/hr-policies", "/training-videos"],
     HOD: ALL_ROUTES,
     SUPER_ADMIN: ALL_ROUTES,
   },
@@ -348,6 +349,13 @@ const NAV_ITEMS: NavItem[] = [
     icon: GraduationCap,
     to: "/access",
     color: "text-teal-600",
+  },
+
+  {
+    label: "Training Videos",
+    icon: GraduationCap,
+    to: "/training-videos",
+    color: "text-blue-600",
   },
   {
     label: "Asset Management",
