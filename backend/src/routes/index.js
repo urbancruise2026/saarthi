@@ -26,7 +26,7 @@ import compoffRouter from "../module/CompOff/compOff.route.js";
 import leaveBalanceRouter from "../module/Leave/leaveBalance.route.js";
 import trainingModuleRouter from "../module/TrainingModule/traininModule.route.js";
 import trainingReviewRouter from "../module/TrainingReview/trainingReview.routes.js";
-import trainingQueryRouter from "../module/TrainingQuery/trainingQuery.routes.js";
+import trainingQueryRouter from "../module/trainingQuery/trainingQuery.routes.js";
 import trainingTypingRouter from "../module/trainingTyping/trainingTyping.route.js";
 import trainingMapQueryRoutes from "../module/TrainingGoogleMap/TrainingGoogleMap.route.js";
 
