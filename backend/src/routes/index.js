@@ -24,6 +24,11 @@ import dutyrosterRouter from "../module/Dutyroster/dutyroster.route.js";
 import leaveRouter from "../module/Leave/leave.route.js";
 import compoffRouter from "../module/CompOff/compOff.route.js";
 import leaveBalanceRouter from "../module/Leave/leaveBalance.route.js";
+import trainingModuleRouter from "../module/TrainingModule/traininModule.route.js";
+import trainingReviewRouter from "../module/TrainingReview/trainingReview.routes.js";
+import trainingQueryRouter from "../module/TrainingQuery/trainingQuery.routes.js";
+import trainingTypingRouter from "../module/trainingTyping/trainingTyping.route.js";
+import trainingMapQueryRoutes from "../module/TrainingGoogleMap/TrainingGoogleMap.route.js";
 
 const registerRoutes = (app) => {
   app.use("/api/v1/link", linkRouter);
@@ -51,6 +56,11 @@ const registerRoutes = (app) => {
   app.use("/api/v1/leaves", leaveRouter);
   app.use("/api/v1/leave-balances", leaveBalanceRouter);
   app.use("/api/v1/comp-offs", compoffRouter);
+  app.use("/api/v1/training-modules", trainingModuleRouter);
+  app.use("/api/v1/training-reviews", trainingReviewRouter);
+  app.use("/api/v1/training-queries", trainingQueryRouter);
+  app.use("/api/v1/typing", trainingTypingRouter);
+  app.use("/api/v1/training-map-query", trainingMapQueryRoutes);
 };
 
 export default registerRoutes;
