@@ -5,7 +5,7 @@ import { asyncHandler } from "../../utils/asyncHandler.js";
 import {
   uploadOnCloudinary,
   deleteFromCloudinary,
-} from "../../utils/Cloudinary.js";
+} from "../../utils/cloudinary.js";
 
 import {
   createTrainingModule,
