@@ -1,4 +1,4 @@
-import TypingModel from "./trainingTyping.Model.js";
+import TypingModel from "./trainingTyping.model.js";
 
 export const addTypingScores = async (req, res) => {
   try {
